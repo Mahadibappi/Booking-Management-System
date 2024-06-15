@@ -3,8 +3,9 @@ import { facilityController } from "./facility.controller";
 
 const router = Router();
 router.post("/", facilityController.createFacility);
-router.get("/:facilityId", facilityController.getSingleFacility);
-router.put("/:facilityId", facilityController.updateFacility);
+router.get("/:id", facilityController.getSingleFacility);
+router.put("/:id", facilityController.updateFacility);
 router.get("/", facilityController.getAllFacility);
+router.delete("/:id", facilityController.deleteFacility);
 
 export const facilityRoute = router;

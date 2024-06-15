@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { TFacility } from "./facility.interface";
 import { Facility } from "./facility.model";
+
 const createFacilityIntoDb = async (payload: TFacility) => {
   try {
     const facility = await Facility.create(payload);
@@ -9,6 +10,7 @@ const createFacilityIntoDb = async (payload: TFacility) => {
     console.log(error.message);
   }
 };
+
 // get all facility
 const getAllFacilityFromDB = async () => {
   const facilities = await Facility.find();
@@ -16,7 +18,7 @@ const getAllFacilityFromDB = async () => {
 };
 
 // Get single facility by ID
-const getFacilityFromDbB = async (id: string) => {
+const getSingleFacilityFromDbB = async (id: string) => {
   try {
     const facility = await Facility.findById(id);
     if (!facility) {
@@ -31,14 +33,22 @@ const getFacilityFromDbB = async (id: string) => {
 const updateFacilityIntoDB = async (id: string, data: Partial<TFacility>) => {
   const update = await Facility.findByIdAndUpdate(id, data, { new: true });
   if (!update) {
-    console.error(`facility with id ${id} not`);
+    throw new Error(`facility did't updated`);
   }
   return update;
+};
+const deleteFacilityFromDB = async (id: string) => {
+  const remove = await Facility.findByIdAndDelete(id);
+  if (!remove) {
+    throw new Error(`facility did't deleted`);
+  }
+  return remove;
 };
 
 export const facilityService = {
   createFacilityIntoDb,
   getAllFacilityFromDB,
-  getFacilityFromDbB,
+  getSingleFacilityFromDbB,
   updateFacilityIntoDB,
+  deleteFacilityFromDB,
 };
