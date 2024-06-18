@@ -21,14 +21,6 @@ const getAllBookingFromDB = async () => {
   return allBookings.map(formatBookingDate);
 };
 
-// get booking by user
-const getBookingByUser = async (userId: string) => {
-  const booking = await Booking.find({ user: userId })
-    .populate("facility")
-    .populate("user", "-password");
-  return booking.map(formatBookingDate);
-};
-
 // cancel booking
 const cancelBookingFromDB = async (id: string) => {
   const cancelBooking = await Booking.findByIdAndDelete(id)
@@ -37,6 +29,18 @@ const cancelBookingFromDB = async (id: string) => {
   return cancelBooking;
 };
 
+// get booking by user
+const getBookingByUser = async (userId: string) => {
+  const bookings = await Booking.find({ userId })
+    .populate("facility")
+    .populate("user", "-password");
+
+  if (!bookings || bookings.length === 0) {
+    console.log("No bookings found for the provided userId.");
+  }
+
+  return bookings.map(formatBookingDate);
+};
 export const BookingService = {
   createBookingIntoDB,
   getAllBookingFromDB,

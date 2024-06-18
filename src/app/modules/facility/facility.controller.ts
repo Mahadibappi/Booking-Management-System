@@ -1,110 +1,74 @@
 import { Request, Response } from "express";
 import { facilityService } from "./facility.service";
 import httpStatus from "http-status";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
 
-const createFacility = async (req: Request, res: Response) => {
-  try {
-    const facility = req.body;
+const createFacility = catchAsync(async (req: Request, res: Response) => {
+  const facility = req.body;
 
-    const result = await facilityService.createFacilityIntoDb(facility);
-    res.status(200).json({
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Facility Created Successfully",
-      data: result,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  const result = await facilityService.createFacilityIntoDb(facility);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Facility Created Successfully",
+    data: result,
+  });
+});
 
-const getAllFacility = async (req: Request, res: Response) => {
-  try {
-    const result = await facilityService.getAllFacilityFromDB();
+const getAllFacility = catchAsync(async (req: Request, res: Response) => {
+  const result = await facilityService.getAllFacilityFromDB();
 
-    res.json({
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "All Facility retrieved Successfully",
-      data: result,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Facility Retrieved Successfully",
+    data: result,
+  });
+});
 
 //get single facility by id
-const getSingleFacility = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const result = await facilityService.getSingleFacilityFromDbB(id);
+const getSingleFacility = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await facilityService.getSingleFacilityFromDbB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Single Facility Retrieved Successfully",
+    data: result,
+  });
+});
 
-    res.json({
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Facility retrieved successfully",
-      data: result,
-    });
-  } catch (error: any) {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      success: false,
-      message: error.message,
-    });
+const updateFacility = catchAsync(async (req: Request, res: Response) => {
+  const data = req.body;
+
+  const { id } = req.params;
+
+  const result = await facilityService.updateFacilityIntoDB(id, data);
+  if (!result) {
+    return res.status(404).json({ message: "facility not updated" });
   }
-};
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: " Facility Updated Successfully",
+    data: result,
+  });
+});
+const deleteFacility = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
 
-const updateFacility = async (req: Request, res: Response) => {
-  try {
-    const data = req.body;
-
-    const { id } = req.params;
-
-    const result = await facilityService.updateFacilityIntoDB(id, data);
-    if (!result) {
-      return res.status(404).json({ message: "facility not updated" });
-    }
-
-    res.json({
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Facility Updated Successfully",
-      data: result,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+  const result = await facilityService.deleteFacilityFromDB(id);
+  if (!result) {
+    return res.status(404).json({ message: "facility not deleted" });
   }
-};
-const deleteFacility = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-
-    const result = await facilityService.deleteFacilityFromDB(id);
-    if (!result) {
-      return res.status(404).json({ message: "facility not deleted" });
-    }
-
-    res.json({
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Facility Deleted Successfully",
-      data: result,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: " Facility Deleted Successfully",
+    data: result,
+  });
+});
 
 export const facilityController = {
   createFacility,

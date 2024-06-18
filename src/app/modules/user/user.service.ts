@@ -1,8 +1,8 @@
 import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
-import { TUser } from "./auth.interface";
-import User from "./auth.model";
-import { comparePassword, hashPassword } from "./auth.utils";
+import { TUser } from "./user.interface";
+import User from "./user.model";
+import { comparePassword, hashPassword } from "./user.utils";
 
 const createUserIntoDB = async (payload: TUser) => {
   try {

@@ -1,4 +1,4 @@
-import { TUser } from "./auth.interface";
+import { TUser } from "./user.interface";
 import { Schema, model } from "mongoose";
 
 const userSchema = new Schema<TUser>({
