@@ -18,4 +18,7 @@ app.use("/api", routes_1.default);
 app.get("/api/check-availability", booking_controller_1.bookingController.checkAvailableSlot);
 //global error handler
 app.use(globalErrorhandler_1.default);
+app.get("/", (req, res) => {
+    res.send("Booking Server Running");
+});
 exports.default = app;
