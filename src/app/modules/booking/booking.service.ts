@@ -48,6 +48,7 @@ export const getBookingsByDate = async (date: string): Promise<TBooking[]> => {
   return bookings;
 };
 
+// check availability
 export const findAvailableSlotFromDb = (
   bookings: TBooking[],
   openingTime: string,
