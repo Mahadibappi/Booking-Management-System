@@ -3,6 +3,9 @@ import { NextFunction, Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 import config from "../config";
 import User from "../modules/user/user.model";
+import { TUserRole } from "../modules/user/user.interface";
+import AppError from "../errors/AppError";
+import httpStatus from "http-status";
 
 // Extend Express Request interface to include token and user
 declare global {
@@ -15,8 +18,8 @@ declare global {
 }
 
 // Define the authentication middleware
-const auth = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+const auth = (...roles: TUserRole[]) => {
+  return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     // Extract the token from the Authorization header
     const authHeader = req.header("Authorization");
     if (!authHeader) {
@@ -49,16 +52,21 @@ const auth = catchAsync(
       if (!user) {
         throw new Error("User Not Exist");
       }
+      const role = user?.role;
+      if (roles && !roles.includes(role)) {
+        throw new AppError(httpStatus.UNAUTHORIZED, "your are not authorized");
+      }
 
       // Attach the token and user to the request object
       req.token = token;
       req.user = user;
+      // set up role
 
       next();
     } catch (error: any) {
-      res.status(401).send({ error: "Please authenticate" });
+      throw new AppError(error.message, "Your are not authorized");
     }
-  }
-);
+  });
+};
 
 export default auth;

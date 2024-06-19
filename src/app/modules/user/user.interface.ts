@@ -1,4 +1,3 @@
-import { Model } from "mongoose";
 import { USER_ROLE } from "./user.constant";
 
 export type TUser = {
@@ -10,11 +9,5 @@ export type TUser = {
   role: "user" | "admin";
   address: string;
 };
-export type TUserLogin = {
-  email: string;
-  password: string;
-};
-
-export interface UserModel extends Model<TUser> {}
 
 export type TUserRole = keyof typeof USER_ROLE;
