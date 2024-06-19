@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
-import { BookingService } from "./booking.service";
+import {
+  BookingService,
+  findAvailableSlotFromDb,
+  getBookingsByDate,
+} from "./booking.service";
 import sendResponse from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
 
@@ -54,9 +58,24 @@ const cancelBooking = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const checkAvailableSlot = catchAsync(async (req: Request, res: Response) => {
+  const date = req.query.date || new Date().toISOString().split("T")[0];
+  const bookings = await getBookingsByDate(date as string);
+  const openingTime = "08:00";
+  const closingTime = "18:00";
+  const result = findAvailableSlotFromDb(bookings, openingTime, closingTime);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Availability checked successfully",
+    data: result,
+  });
+});
+
 export const bookingController = {
   createBooking,
   getAllBooking,
   getBookingByUser,
   cancelBooking,
+  checkAvailableSlot,
 };

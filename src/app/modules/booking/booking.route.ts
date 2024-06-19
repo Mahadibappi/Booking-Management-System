@@ -10,6 +10,7 @@ router.post(
   validateRequest(bookingValidation),
   bookingController.createBooking
 );
+router.get("/check-availability", bookingController.checkAvailableSlot);
 router.get("/", bookingController.getAllBooking);
 router.get("/:user", bookingController.getBookingByUser);
 router.delete("/:id", bookingController.cancelBooking);
