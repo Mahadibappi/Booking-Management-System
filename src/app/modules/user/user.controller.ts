@@ -6,7 +6,7 @@ import sendResponse from "../../utils/sendResponse";
 import userValidationSchema from "./user.validation";
 
 const createUser = catchAsync(async (req, res) => {
-  const user: any = userValidationSchema.parse(req.body);
+  const user = req.body;
   const result = await UserService.createUserIntoDB(user);
   sendResponse(res, {
     statusCode: httpStatus.OK,

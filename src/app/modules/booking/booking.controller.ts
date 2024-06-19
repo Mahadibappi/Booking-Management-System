@@ -3,10 +3,9 @@ import httpStatus from "http-status";
 import { BookingService } from "./booking.service";
 import sendResponse from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
-import { bookingValidation } from "./booking.validation";
 
 const createBooking = catchAsync(async (req: Request, res: Response) => {
-  const booking: any = bookingValidation.parse(req.body);
+  const booking = req.body;
   const result = await BookingService.createBookingIntoDB(booking);
   sendResponse(res, {
     statusCode: httpStatus.OK,
