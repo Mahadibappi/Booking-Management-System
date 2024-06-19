@@ -17,13 +17,15 @@ const createUser = catchAsync(async (req, res) => {
 
 const Login = catchAsync(async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const result = await UserService.loginUser(email, password);
-  const { password: _, ...excludePassword } = result.toObject();
+  const { user, token } = await UserService.loginUser(email, password);
+
+  const { password: _, ...excludePassword } = user.toObject();
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "User Created Successfully",
-    data: excludePassword,
+    data: { excludePassword, token },
   });
 });
 

@@ -1,9 +1,9 @@
-import { JwtPayload } from "jsonwebtoken";
+import { Request } from "express";
+import { UserDocument } from "../modules/user/user.model";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user: JwtPayload;
-    }
+declare module "express-serve-static-core" {
+  interface Request {
+    token?: string;
+    user?: UserDocument;
   }
 }

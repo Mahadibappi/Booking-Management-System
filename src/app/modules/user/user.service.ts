@@ -1,8 +1,10 @@
+import jwt from "jsonwebtoken";
 import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TUser } from "./user.interface";
 import User from "./user.model";
 import { comparePassword, hashPassword } from "./user.utils";
+import config from "../../config";
 
 const createUserIntoDB = async (payload: TUser) => {
   try {
@@ -24,6 +26,14 @@ const loginUser = async (email: string, password: string) => {
   if (!isPasswordValid) {
     throw new Error("Password did't match");
   }
-  return user;
+
+  //generate jwt token
+  const token = jwt.sign(
+    { id: user._id, email: user.email },
+    config.jwt_access_secret as string,
+    { expiresIn: "1d" }
+  );
+
+  return { user, token };
 };
 export const UserService = { createUserIntoDB, loginUser };

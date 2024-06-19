@@ -6,7 +6,7 @@ import { bookingRoute } from "../modules/booking/booking.route";
 const router = Router();
 const moduleRoutes = [
   {
-    path: "/auth",
+    path: "/user",
     route: userRoute,
   },
   {
