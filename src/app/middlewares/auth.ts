@@ -24,7 +24,8 @@ const auth = catchAsync(
       if (!user) {
         throw new Error("User Not Exist");
       }
-
+      req.token = token;
+      req.user = user;
       next();
     } catch (error) {
       res.status(401).send({ error: "Please authenticate" });
