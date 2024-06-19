@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "prod": "node ./dist/server.js",
-    "start": "ts-node-dev src/server.ts",
+    "start:dev": "ts-node-dev src/server.ts",
+    "build": "npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

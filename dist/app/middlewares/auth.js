@@ -16,27 +16,48 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const config_1 = __importDefault(require("../config"));
 const user_model_1 = __importDefault(require("../modules/user/user.model"));
-const auth = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.replace("Bearer ", "");
-    if (!token) {
-        return res.status(401).send({ error: "User not authenticated" });
-    }
-    try {
-        const decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_access_secret);
-        const user = yield user_model_1.default.findOne({
-            _id: decoded.id,
-            "access-token": token,
-        });
-        if (!user) {
-            throw new Error("User Not Exist");
+const AppError_1 = __importDefault(require("../errors/AppError"));
+const http_status_1 = __importDefault(require("http-status"));
+// Define the authentication middleware
+const auth = (...roles) => {
+    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        // Extract the token from the Authorization header
+        const authHeader = req.header("Authorization");
+        if (!authHeader) {
+            return res.status(401).send({ error: "User not authenticated" });
         }
-        req.token = token;
-        req.user = user;
-        next();
-    }
-    catch (error) {
-        res.status(401).send({ error: "Please authenticate" });
-    }
-}));
+        const token = authHeader.replace("Bearer ", "");
+        if (!token) {
+            return res.status(401).send({ error: "User not authenticated" });
+        }
+        try {
+            // Verify the token and extract the payload
+            const decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_access_secret);
+            // Ensure the decoded token contains an id
+            if (!decoded.id) {
+                throw new Error("Invalid token: No user ID found");
+            }
+            // Find the user in the database by ID and access token
+            const user = yield user_model_1.default.findOne({
+                _id: decoded.id,
+            });
+            // If no user is found, throw an error
+            if (!user) {
+                throw new Error("User Not Exist");
+            }
+            const role = user === null || user === void 0 ? void 0 : user.role;
+            if (roles && !roles.includes(role)) {
+                throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, "your are not authorized");
+            }
+            // Attach the token and user to the request object
+            req.token = token;
+            req.user = user;
+            // set up role
+            next();
+        }
+        catch (error) {
+            throw new AppError_1.default(error.message, "Something went wrong!");
+        }
+    }));
+};
 exports.default = auth;
