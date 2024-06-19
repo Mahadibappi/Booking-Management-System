@@ -64,7 +64,7 @@ const auth = (...roles: TUserRole[]) => {
 
       next();
     } catch (error: any) {
-      throw new AppError(error.message, "Your are not authorized");
+      throw new AppError(error.message, "Something went wrong!");
     }
   });
 };

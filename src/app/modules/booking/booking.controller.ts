@@ -53,7 +53,7 @@ const cancelBooking = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "All Booking  Retrieved Successfully",
+    message: "Booking Deleted Successfully",
     data: result,
   });
 });
