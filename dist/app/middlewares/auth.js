@@ -31,6 +31,8 @@ const auth = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, voi
         if (!user) {
             throw new Error("User Not Exist");
         }
+        req.token = token;
+        req.user = user;
         next();
     }
     catch (error) {
