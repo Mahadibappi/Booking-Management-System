@@ -3,9 +3,10 @@ import { UserService } from "./user.service";
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
+import userValidationSchema from "./user.validation";
 
 const createUser = catchAsync(async (req, res) => {
-  const user = req.body;
+  const user: any = userValidationSchema.parse(req.body);
   const result = await UserService.createUserIntoDB(user);
   sendResponse(res, {
     statusCode: httpStatus.OK,
