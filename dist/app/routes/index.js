@@ -7,7 +7,7 @@ const booking_route_1 = require("../modules/booking/booking.route");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
-        path: "/user",
+        path: "/auth",
         route: user_route_1.userRoute,
     },
     {
