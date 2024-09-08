@@ -4,7 +4,10 @@ import { Facility } from "./facility.model";
 
 const createFacilityIntoDb = async (payload: TFacility) => {
   try {
-    const facility = await Facility.create(payload);
+    const facilityData = {
+      ...payload,
+    };
+    const facility = await Facility.create(facilityData);
     return facility;
   } catch (error: any) {
     console.log(error.message);

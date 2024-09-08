@@ -4,12 +4,14 @@ import validateRequest from "../../middlewares/validateRequest";
 import facilityValidation from "./facility.validation";
 import auth from "../../middlewares/auth";
 import { USER_ROLE } from "../user/user.constant";
+import { upload } from "../../utils/imageToCloudinary";
 
 const router = Router();
 router.post(
   "/",
   validateRequest(facilityValidation),
   auth(USER_ROLE.admin),
+  upload.single("file"),
   facilityController.createFacility
 );
 router.get("/:id", facilityController.getSingleFacility);
