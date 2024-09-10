@@ -3,18 +3,10 @@ import { facilityService } from "./facility.service";
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { uploadImageToCloudinary } from "../../utils/imageToCloudinary";
 
 const createFacility = catchAsync(async (req: Request, res: Response) => {
   const facility = req.body;
 
-  if (req.file) {
-    const uploadFile = await uploadImageToCloudinary(
-      req.file.filename,
-      req.file.path
-    );
-    facility.image = uploadFile.secure_url;
-  }
   const result = await facilityService.createFacilityIntoDb(facility);
 
   sendResponse(res, {

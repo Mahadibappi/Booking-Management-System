@@ -7,7 +7,9 @@ const createFacilityIntoDb = async (payload: TFacility) => {
     const facilityData = {
       ...payload,
     };
+    console.log(facilityData);
     const facility = await Facility.create(facilityData);
+
     return facility;
   } catch (error: any) {
     console.log(error.message);
