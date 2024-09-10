@@ -10,7 +10,7 @@ const formatBookingDate = (booking: any) => {
 // create booking
 const createBookingIntoDB = async (payload: TBooking) => {
   const booking = await Booking.create(payload);
-  return formatBookingDate(booking);
+  return booking;
 };
 
 // get all booking

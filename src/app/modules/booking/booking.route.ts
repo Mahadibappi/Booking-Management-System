@@ -10,7 +10,7 @@ const router = Router();
 router.post(
   "/",
   validateRequest(bookingValidation),
-  auth(USER_ROLE.user),
+  auth(USER_ROLE.admin),
   bookingController.createBooking
 );
 router.get("/", auth(USER_ROLE.admin), bookingController.getAllBooking);

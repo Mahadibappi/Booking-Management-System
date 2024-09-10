@@ -8,7 +8,7 @@ import { USER_ROLE } from "../user/user.constant";
 const router = Router();
 router.post(
   "/",
-
+  validateRequest(facilityValidation),
   auth(USER_ROLE.admin),
 
   facilityController.createFacility

@@ -10,7 +10,9 @@ import catchAsync from "../../utils/catchAsync";
 
 const createBooking = catchAsync(async (req: Request, res: Response) => {
   const booking = req.body;
+  console.log(booking);
   const result = await BookingService.createBookingIntoDB(booking);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
