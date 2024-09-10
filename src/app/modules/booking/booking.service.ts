@@ -15,10 +15,9 @@ const createBookingIntoDB = async (payload: TBooking) => {
 
 // get all booking
 const getAllBookingFromDB = async () => {
-  const allBookings = await Booking.find()
-    .populate("facility")
-    .populate("user", "-password");
-  return allBookings.map(formatBookingDate);
+  const allBookings = await Booking.find();
+
+  return allBookings;
 };
 
 // cancel booking
