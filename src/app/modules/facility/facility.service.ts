@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import { TFacility } from "./facility.interface";
 import { Facility } from "./facility.model";
 
@@ -7,7 +6,7 @@ const createFacilityIntoDb = async (payload: TFacility) => {
     const facilityData = {
       ...payload,
     };
-    console.log(facilityData);
+
     const facility = await Facility.create(facilityData);
 
     return facility;

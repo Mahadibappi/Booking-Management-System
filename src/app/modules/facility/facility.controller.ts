@@ -3,37 +3,26 @@ import { facilityService } from "./facility.service";
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { v2 as cloudinary } from "cloudinary";
 import { Facility } from "./facility.model";
-import fs from "fs";
-
-cloudinary.config({
-  cloud_name: "cloud-mahadi",
-  api_key: "628425217641132",
-  api_secret: "RNTnDYsj8FjLKJUSygvr4v4TlhA",
-  secure: true,
-});
+import uploadImage from "../../utils/cloudinary";
+import { TFacility } from "./facility.interface";
 
 const createFacility = catchAsync(async (req: Request, res: Response) => {
   try {
     const { name, description, pricePerHour, location } = req.body;
 
-    let imageUrl = "";
+    let imageUrl: string | undefined = undefined;
 
+    // upload image to cloudinary
     if (req.file) {
       try {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: "facilities",
-        });
-        imageUrl = result.secure_url;
-        fs.unlinkSync(req.file.path);
+        imageUrl = await uploadImage(req.file.path);
       } catch (error) {
-        console.error("Cloudinary upload error:", error);
-        return res.status(500).json({ error: "Cloudinary upload failed" });
+        console.log((error as Error).message);
       }
     }
 
-    const facilityData = {
+    const facilityData: TFacility = {
       name,
       description,
       pricePerHour: Number(pricePerHour),
@@ -42,7 +31,7 @@ const createFacility = catchAsync(async (req: Request, res: Response) => {
     };
 
     const facility = await Facility.create(facilityData);
-    console.log(facility);
+
     res.status(201).json({
       success: true,
       data: facility,
