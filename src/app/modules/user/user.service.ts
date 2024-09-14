@@ -15,6 +15,16 @@ const createUserIntoDB = async (payload: TUser) => {
     throw new Error(error.message);
   }
 };
+// admin creation
+const createAdminIntoDB = async (payload: TUser) => {
+  try {
+    payload.password = await hashPassword(payload.password);
+    const newUser = await User.create(payload);
+    return newUser;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
 
 const loginUser = async (email: string, password: string) => {
   const user = await User.findOne({ email: email });
@@ -36,4 +46,4 @@ const loginUser = async (email: string, password: string) => {
 
   return { user, token };
 };
-export const UserService = { createUserIntoDB, loginUser };
+export const UserService = { createUserIntoDB, createAdminIntoDB, loginUser };
