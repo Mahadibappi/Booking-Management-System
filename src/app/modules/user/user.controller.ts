@@ -17,7 +17,6 @@ const createUser = catchAsync(async (req, res) => {
 
 const createAdmin = catchAsync(async (req, res) => {
   const user = req.body;
-  console.log(user);
   const result = await UserService.createUserIntoDB(user);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -31,13 +30,13 @@ const Login = catchAsync(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const { user, token } = await UserService.loginUser(email, password);
 
-  const { password: _, ...excludePassword } = user.toObject();
+  const { password: _, name, ...excludePassword } = user.toObject();
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "User Logged In Successfully",
-    data: { excludePassword, token },
+    data: { user: { name, ...excludePassword }, token },
   });
 });
 

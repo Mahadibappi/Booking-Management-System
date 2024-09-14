@@ -1,6 +1,4 @@
 import jwt from "jsonwebtoken";
-import httpStatus from "http-status";
-import AppError from "../../errors/AppError";
 import { TUser } from "./user.interface";
 import User from "./user.model";
 import { comparePassword, hashPassword } from "./user.utils";
@@ -28,6 +26,7 @@ const createAdminIntoDB = async (payload: TUser) => {
 
 const loginUser = async (email: string, password: string) => {
   const user = await User.findOne({ email: email });
+  console.log(user);
 
   if (!user) {
     throw new Error("This user not exist");
