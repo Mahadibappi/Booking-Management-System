@@ -10,10 +10,14 @@ const router = Router();
 router.post(
   "/",
   validateRequest(bookingValidation),
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.user),
   bookingController.createBooking
 );
-router.get("/", auth(USER_ROLE.admin), bookingController.getAllBooking);
+router.get(
+  "/",
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  bookingController.getAllBooking
+);
 router.get("/:user", auth(USER_ROLE.user), bookingController.getBookingByUser);
 router.delete("/:id", auth(USER_ROLE.user), bookingController.cancelBooking);
 
