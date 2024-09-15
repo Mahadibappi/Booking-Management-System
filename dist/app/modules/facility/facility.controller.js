@@ -17,15 +17,37 @@ const facility_service_1 = require("./facility.service");
 const http_status_1 = __importDefault(require("http-status"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const facility_model_1 = require("./facility.model");
+const cloudinary_1 = __importDefault(require("../../utils/cloudinary"));
 const createFacility = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const facility = req.body;
-    const result = yield facility_service_1.facilityService.createFacilityIntoDb(facility);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_1.default.OK,
-        success: true,
-        message: "Facility Created Successfully",
-        data: result,
-    });
+    try {
+        const { name, description, pricePerHour, location } = req.body;
+        let imageUrl = undefined;
+        // upload image to cloudinary
+        if (req.file) {
+            try {
+                imageUrl = yield (0, cloudinary_1.default)(req.file.path);
+            }
+            catch (error) {
+                console.log(error.message);
+            }
+        }
+        const facilityData = {
+            name,
+            description,
+            pricePerHour: Number(pricePerHour),
+            location,
+            image: imageUrl,
+        };
+        const facility = yield facility_model_1.Facility.create(facilityData);
+        res.status(201).json({
+            success: true,
+            data: facility,
+        });
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 }));
 const getAllFacility = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield facility_service_1.facilityService.getAllFacilityFromDB();

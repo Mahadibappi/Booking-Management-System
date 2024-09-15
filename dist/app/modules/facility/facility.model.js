@@ -7,5 +7,6 @@ const facilitySchema = new mongoose_1.Schema({
     description: { type: String, required: true },
     pricePerHour: { type: Number, required: true },
     location: { type: String },
+    image: { type: String },
 });
 exports.Facility = (0, mongoose_1.model)("Facility", facilitySchema);

@@ -13,7 +13,8 @@ exports.facilityService = void 0;
 const facility_model_1 = require("./facility.model");
 const createFacilityIntoDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const facility = yield facility_model_1.Facility.create(payload);
+        const facilityData = Object.assign({}, payload);
+        const facility = yield facility_model_1.Facility.create(facilityData);
         return facility;
     }
     catch (error) {

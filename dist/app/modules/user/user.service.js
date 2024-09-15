@@ -27,8 +27,20 @@ const createUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
         throw new Error(error.message);
     }
 });
+// admin creation
+const createAdminIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        payload.password = yield (0, user_utils_1.hashPassword)(payload.password);
+        const newUser = yield user_model_1.default.create(payload);
+        return newUser;
+    }
+    catch (error) {
+        throw new Error(error.message);
+    }
+});
 const loginUser = (email, password) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.default.findOne({ email: email });
+    console.log(user);
     if (!user) {
         throw new Error("This user not exist");
     }
@@ -40,4 +52,4 @@ const loginUser = (email, password) => __awaiter(void 0, void 0, void 0, functio
     const token = jsonwebtoken_1.default.sign({ id: user._id, email: user.email }, config_1.default.jwt_access_secret, { expiresIn: "1d" });
     return { user, token };
 });
-exports.UserService = { createUserIntoDB, loginUser };
+exports.UserService = { createUserIntoDB, createAdminIntoDB, loginUser };

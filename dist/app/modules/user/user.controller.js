@@ -38,15 +38,25 @@ const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: result,
     });
 }));
+const createAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.body;
+    const result = yield user_service_1.UserService.createUserIntoDB(user);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Admin Created Successfully",
+        data: result,
+    });
+}));
 const Login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     const { user, token } = yield user_service_1.UserService.loginUser(email, password);
-    const _a = user.toObject(), { password: _ } = _a, excludePassword = __rest(_a, ["password"]);
+    const _a = user.toObject(), { password: _, name } = _a, excludePassword = __rest(_a, ["password", "name"]);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: "User Logged In Successfully",
-        data: { excludePassword, token },
+        data: { user: Object.assign({ name }, excludePassword), token },
     });
 }));
-exports.userController = { createUser, Login };
+exports.userController = { createUser, Login, createAdmin };

@@ -24,19 +24,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Booking = void 0;
-// src/models/Booking.ts
 const mongoose_1 = __importStar(require("mongoose"));
+// Mongoose model for bookings
 const BookingSchema = new mongoose_1.Schema({
-    facility: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "Facility" },
-    date: { type: Date, required: true },
+    date: { type: String, required: true },
+    name: { type: String, required: true },
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
-    user: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "User" },
     payableAmount: { type: Number, required: true },
-    isBooked: {
-        type: String,
-        enum: ["confirmed", "pending", "cancelled"],
-        required: true,
-    },
 });
 exports.Booking = mongoose_1.default.model("Booking", BookingSchema);

@@ -17,14 +17,12 @@ const formatBookingDate = (booking) => {
 // create booking
 const createBookingIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const booking = yield booking_model_1.Booking.create(payload);
-    return formatBookingDate(booking);
+    return booking;
 });
 // get all booking
 const getAllBookingFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const allBookings = yield booking_model_1.Booking.find()
-        .populate("facility")
-        .populate("user", "-password");
-    return allBookings.map(formatBookingDate);
+    const allBookings = yield booking_model_1.Booking.find();
+    return allBookings;
 });
 // cancel booking
 const cancelBookingFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
