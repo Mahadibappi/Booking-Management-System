@@ -12,7 +12,10 @@ const app = (0, express_1.default)();
 //middlewares
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:5173"],
+    origin: [
+        "https://booking-management-client-rouge.vercel.app",
+        "http://localhost:5173",
+    ],
 }));
 //routes
 app.use("/api", routes_1.default);
